@@ -99,7 +99,7 @@ public class ClassController {
 	public ResponseEntity<?> deleteById(@PathVariable Integer id) {
 		if (classRepository.existsById(id) && classService.isActive(id)) {
 			ClassEntity clazz = classRepository.findById(id).get();
-			classRepository.save(clazz);
+			classRepository.delete(clazz);
 			logger.info("Deleted class with ID: " + id.toString());
 			return new ResponseEntity<ClassEntity>(clazz, HttpStatus.OK);
 		}

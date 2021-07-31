@@ -197,6 +197,7 @@ public class StudentController {
 				StudentEntity student = studentRepository.findById(studentId).get();
 				student.setParent(parentRepository.findById(parentId).get());
 				studentRepository.save(student);
+				logger.info("Add parent" + parentId + " for teacherstudent " + student.getFirstName() + " " + student.getLastName());
 				return new ResponseEntity<StudentEntity>(student, HttpStatus.OK);
 			}
 			return new ResponseEntity<RESTError>(new RESTError(4, "Parent not found."), HttpStatus.NOT_FOUND);
@@ -244,6 +245,8 @@ public class StudentController {
 				StudentEntity student = studentRepository.findById(studentId).get();
 				student.setAttendingClass(classRepository.findById(classId).get());
 				studentRepository.save(student);
+				
+				logger.info("Add class" + classId + " for student " + student.getFirstName() + " " + student.getLastName());
 				return new ResponseEntity<StudentEntity>(student, HttpStatus.OK);
 			}
 			return new ResponseEntity<RESTError>(new RESTError(1, "Class not found."), HttpStatus.NOT_FOUND);

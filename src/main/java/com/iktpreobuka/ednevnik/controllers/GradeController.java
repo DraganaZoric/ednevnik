@@ -110,7 +110,7 @@ public class GradeController {
 	
 	//dodaj ocenu i posalji mail
 	@Secured({ "ROLE_ADMIN", "ROLE_TEACHER" })
-	//@JsonView(Viewes.TeacherView.class)
+	//@JsonView(Viewes.PrivateView.class)
 	@PostMapping(value = "/{studentTeacherCourseId}/{gradeId}")
 	public ResponseEntity<?> gradeStudent(@PathVariable Integer gradeId, @PathVariable Integer studentTeacherCourseId) {
 		if (gradeRepository.existsById(gradeId) && gradeService.isActive(gradeId)) {
@@ -127,7 +127,8 @@ public class GradeController {
 						+ " " + studentTeacherCourse.getStudent().getLastName() + " " + grade.getGrade());
 				emailObject.setText("Vaše dete " + studentTeacherCourse.getStudent().getFirstName()+ " " + studentTeacherCourse.getStudent().getLastName() + " je dobilo ocenu " + grade.getGrade() + " kod profesora "
 						+ studentTeacherCourse.getTeacherCourse().getTeacher().getFirstName() +  " "
-						+ studentTeacherCourse.getTeacherCourse().getTeacher().getLastName());
+						+ studentTeacherCourse.getTeacherCourse().getTeacher().getLastName() +
+						" iz predmeta "  + studentTeacherCourse.getTeacherCourse().getCourse().getName());
 						
 
 				emailService.sendSimpleMessage(emailObject);

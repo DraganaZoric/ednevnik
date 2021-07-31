@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.annotation.JsonView;
+
 import com.iktpreobuka.ednevnik.controllers.util.RESTError;
 import com.iktpreobuka.ednevnik.entities.CourseEntity;
 import com.iktpreobuka.ednevnik.entities.TeacherCourseEntity;
@@ -38,7 +38,7 @@ import com.iktpreobuka.ednevnik.repository.CourseRepository;
 import com.iktpreobuka.ednevnik.repository.RoleRepository;
 import com.iktpreobuka.ednevnik.repository.TeacherCourseRepository;
 import com.iktpreobuka.ednevnik.repository.TeacherRepository;
-import com.iktpreobuka.ednevnik.security.Viewes;
+
 import com.iktpreobuka.ednevnik.services.CourseService;
 import com.iktpreobuka.ednevnik.services.TeacherService;
 import com.iktpreobuka.ednevnik.utils.Encryption;
@@ -137,7 +137,7 @@ public class TeacherController {
 			teacher.setFirstName(uteacher.getFirstName());
 			teacher.setLastName(uteacher.getLastName());
 			teacherRepository.save(teacher);
-			logger.info("Updated teacher with ID: " + teacher.getFirstName() + " " + teacher.getLastName());
+			logger.info("Updated teacher with ID: " + teacher.getId() + " "+ teacher.getFirstName() + " " + teacher.getLastName());
 			return new ResponseEntity<TeacherEntity>(teacher, HttpStatus.CREATED);
 		}
 		return new ResponseEntity<RESTError>(new RESTError(1, "Teacher not found."), HttpStatus.NOT_FOUND);
@@ -172,11 +172,14 @@ public class TeacherController {
 					TCE.setTeacher(teacherRepository.findById(teacherId).get());
 					TCE.setCourse(courseRepository.findById(courseId).get());
 					teacherCourseRepository.save(TCE);
+					
 					return new ResponseEntity<TeacherEntity>(teacherRepository.findById(teacherId).get(),
 							HttpStatus.OK);
 				}
 				TeacherCourseEntity TCE = teacherCourseRepository.findByTeacherAndCourse(teacher, course);
 				teacherCourseRepository.save(TCE);
+				logger.info("Add cours" + courseId + " for teacher " + teacher.getFirstName() + " " + teacher.getLastName());
+				
 				return new ResponseEntity<TeacherEntity>(teacherRepository.findById(teacherId).get(), HttpStatus.OK);
 			}
 			return new ResponseEntity<RESTError>(new RESTError(11, "Teacher course combination not found."),
